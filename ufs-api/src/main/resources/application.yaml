@@ -1,0 +1,21 @@
+server:
+  servlet:
+    context-path: /ufs-api
+  port: 8800
+  shutdown: graceful
+
+spring:
+  datasource:
+    url: jdbc:postgresql://${pg_host:localhost}:${pg_port:5432}/${pg_db:ufs_pad}
+    username: ${pg_user:postgres}
+    password: ${pg_pwd:postgres}
+  profiles:
+    active: default
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    operations-sorter: alpha
+    tags-sorter: alpha
