@@ -19,3 +19,8 @@ springdoc:
     enabled: true
     operations-sorter: alpha
     tags-sorter: alpha
+
+ufs:
+  client:
+    ctms:
+      base-url: http://localhost:9900/ctms-api
