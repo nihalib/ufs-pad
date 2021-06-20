@@ -16,6 +16,7 @@
     <properties>
         <start-class>com.bluemoonllc.ufs.api.UfsApiApplication</start-class>
         <ufs.model.version>2020.1.1-SNAPSHOT</ufs.model.version>
+        <ctms.model.version>2020.1.1-SNAPSHOT</ctms.model.version>
         <swagger.version>1.5.9</swagger.version>
         <test.container.version>1.15.3</test.container.version>
     </properties>
@@ -26,6 +27,11 @@
             <groupId>com.bluemoonllc</groupId>
             <artifactId>ufs-model</artifactId>
             <version>${ufs.model.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bluemoonllc</groupId>
+            <artifactId>ctms-model</artifactId>
+            <version>${ctms.model.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -40,6 +46,14 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
         <!-- Database Dependency -->
         <dependency>

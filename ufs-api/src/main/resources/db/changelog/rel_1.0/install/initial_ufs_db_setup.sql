@@ -9,7 +9,7 @@ create table ufs_pad.ciam
     id                      bigint          not null    default     nextval(('ufs_pad.ufs_pad_ciam_sqc'::text)::regclass),
     ciam_id                 bigint          not null,
     created_at              timestamp with time zone not null,
-    updated_at              timestamp with time zone not null,
+    updated_at              timestamp with time zone null,
     timezone                varchar(50),
     location                varchar(50),
     currency_code           varchar(50),
@@ -60,7 +60,7 @@ create table ufs_pad.profile
     ssn                     varchar(32),
     pincode                 varchar(16),
     created_at              timestamp with time zone not null,
-    updated_at              timestamp with time zone not null,
+    updated_at              timestamp with time zone null,
     timezone                varchar(50),
     is_test_data            boolean default false not null
 );

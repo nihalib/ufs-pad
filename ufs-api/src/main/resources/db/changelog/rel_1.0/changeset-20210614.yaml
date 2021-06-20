@@ -4,7 +4,7 @@ databaseChangeLog:
   - preConditions:
                    
   - changeSet:
-      id: initial_ctms_pad_db_setup_1.0
+      id: initial_ufs_pad_db_setup_1.0
       author: bilal
       changes:
         # create required tables, pk, fk, seq, idx ...
