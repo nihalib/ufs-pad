@@ -23,4 +23,4 @@ springdoc:
 ufs:
   client:
     ctms:
-      base-url: http://localhost:9900/ctms-api
+      base-url: http://${ctms_uri:localhost}:${ctms_port:9900}/ctms-api
