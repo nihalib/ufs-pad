@@ -13,4 +13,3 @@ COPY ufs-api/target/*-api.jar /app/bin/app.jar
 EXPOSE 8800
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
-
