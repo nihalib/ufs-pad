@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app: postgres-ufs
+  name: postgres-ufs-data-volume
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: postgres-ufs
+  name: postgres-ufs
+spec:
+  replicas: 1
+  minReadySeconds: 45
+  selector:
+    matchLabels:
+      app: postgres-ufs
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: postgres-ufs
+    spec:
+      containers:
+      - env:
+        - name: POSTGRES_DB
+          value: ufs_pad
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          value: postgres
+        image: postgres:9.6.12
+        name: postgres-ufs
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: postgres-ufs-data-volume
+      restartPolicy: Always
+      volumes:
+      - name: postgres-ufs-data-volume
+        persistentVolumeClaim:
+          claimName: postgres-ufs-data-volume
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: postgres-ufs
+  name: postgres-ufs
+spec:
+  type: ClusterIP
+  ports:
+  - name: "5433"
+    port: 5433
+    targetPort: 5432
+  selector:
+    app: postgres-ufs

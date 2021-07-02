@@ -22,10 +22,25 @@ mvn clean install
 mvn clean install -P integration-test
 ```
 
-## Run
+## Run as standalone
+##### Pre-requisites
 
+- Make sure postgres is up & running.
 ```bash
+docker run -p 5432:5432 -d -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=ufs_pad --name postgres postgres:9.6.12
 java -jar ctms-api/target/ctms-api.jar
+```
+
+## Run as docker container
+```bash
+docker network create ufs
+docker run -p 5432:5432 -d -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=ufs_pad --network=ufs --name postgres_ufs postgres:9.6.12
+docker run -p 8800:8800 -d -e pg_host=postgres_ufs --network=ufs --name ufs bilal0606/ufs-api:2020.1.1
+```
+
+## Run on kubernetes
+```bash
+kubectl apply -f postgres-deployment.yaml,deployment.yaml
 ```
 
 ## Modules

@@ -12,6 +12,9 @@ spring:
   profiles:
     active: default
 
+info:
+  pod: ${HOSTNAME:null}
+
 springdoc:
   api-docs:
     enabled: true
