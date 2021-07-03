@@ -1,6 +1,8 @@
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
+  labels:
+    app: ufs-api
   name: ufs-api
   namespace: default
 spec:
