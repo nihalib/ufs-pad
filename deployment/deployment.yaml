@@ -6,7 +6,7 @@ metadata:
   name: ufs-api
   namespace: default
 spec:
-  replicas: 2
+  replicas: 1
   minReadySeconds: 45
   selector:
     matchLabels:
@@ -70,11 +70,10 @@ metadata:
   namespace: default
 spec:
   ports:
-  - nodePort: 30019
-    port: 8081
+  - port: 8081
     protocol: TCP
     targetPort: 8800
   selector:
     app: ufs-api
   sessionAffinity: None
-  type: LoadBalancer
+  type: LoadBalancer          # Change it to `NodePort`, if gateway-ingress is applied.
