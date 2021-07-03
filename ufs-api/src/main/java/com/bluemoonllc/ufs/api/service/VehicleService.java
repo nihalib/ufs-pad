@@ -29,6 +29,7 @@ public class VehicleService implements VehicleServiceBI {
 
     @Override
     public UfsResponse getStationDetails(String fetchType, String location, String vin, Integer page, Integer pageSize) {
+        log.info("Get Station details request fetch type {}, page {}, pageSize {}", fetchType, page, pageSize);
         Optional<VehicleDao> result;
         if (!fetchType.isEmpty() && fetchType.equalsIgnoreCase("ALL")) {
             result = vehicleRegistrationRepo.findByVin(vin);
@@ -39,16 +40,19 @@ public class VehicleService implements VehicleServiceBI {
         }
 
         if (!result.isPresent()) {
+            log.info("Requested vehicle not found");
             UfsResponseStatus status = UfsResponseStatus.NOT_FOUND;
             return new UfsResponse<>(status.getDescription(), status, status.getMessage(), "UFS", null);
         }
         ResponseEntity<UfsResponse<PaginatedResponse>> responseEntity = ctmsClient.getStationByLocation(
                 fetchType, location, page, pageSize);
         if (!responseEntity.getStatusCode().is2xxSuccessful() || isNull(responseEntity.getBody())) {
+            log.info("Requested location not found");
             UfsResponseStatus status = UfsResponseStatus.NOT_FOUND;
             return new UfsResponse<>(status.getDescription(), status, status.getMessage(), "UFS", null);
         }
 
+        log.info("Requested location details returned");
         PaginatedResponse response = responseEntity.getBody().getData();
         UfsResponseStatus status = UfsResponseStatus.DATA_FOUND;
         return new UfsResponse<>(status.getDescription(), status, status.getMessage(), "UFS", response);

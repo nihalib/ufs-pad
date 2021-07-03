@@ -8,9 +8,8 @@ COPY docker-entrypoint.sh /
 RUN chmod +x /docker-entrypoint.sh
 
 # Copy application to base directory
-COPY ufs-api/target/*.jar /app/bin/app.jar
+COPY ufs-api/target/*-api.jar /app/bin/app.jar
 
 EXPOSE 8800
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
-

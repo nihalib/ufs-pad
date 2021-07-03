@@ -5,12 +5,17 @@ server:
   shutdown: graceful
 
 spring:
+  application:
+    name: ufs-api
   datasource:
     url: jdbc:postgresql://${pg_host:localhost}:${pg_port:5432}/${pg_db:ufs_pad}
     username: ${pg_user:postgres}
     password: ${pg_pwd:postgres}
   profiles:
     active: default
+
+info:
+  pod: ${HOSTNAME:null}
 
 springdoc:
   api-docs:
@@ -23,4 +28,4 @@ springdoc:
 ufs:
   client:
     ctms:
-      base-url: http://localhost:9900/ctms-api
+      base-url: http://${ctms_uri:localhost}:${ctms_port:9900}/ctms-api
