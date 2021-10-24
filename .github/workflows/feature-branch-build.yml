@@ -13,6 +13,7 @@ on:
 
 jobs:
   build:
+    name: Build Application
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -35,3 +36,35 @@ jobs:
       run: mvn -s $GITHUB_WORKSPACE/.github/workflows/maven-settings.xml -B clean install --file pom.xml
       env:
         M2_SECRET_TOKEN: ${{ secrets.M2_SECRET_TOKEN }}
+    - name: upload api-spec
+      if: ${{ success() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: swaggerDoc
+        path: ufs-api/target/swagger.json
+        retention-days: 1
+  apiSpec:
+    name: Release api document
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: download api-spec
+      uses: actions/download-artifact@v2
+      with:
+        name: swaggerDoc
+        path: ufs-api/target/swagger.json
+    - name: download swagger ui
+      run: |
+        release_tag=$(curl -sL https://api.github.com/repos/swagger-api/swagger-ui/releases/latest | jq -r ".tag_name")
+        curl -sL -o $release_tag.tar.gz https://api.github.com/repos/swagger-api/swagger-ui/tarball/$release_tag
+        ls
+    - name: generate swagger
+      run: |
+        mkdir docs
+        ls
+        mv swag*/dist/** docs
+        mv docs/index.html .
+        mv ufs-api/target/swagger.json docs
+        rm -rf swag* *.tar.gz
+        cd docs
+        ls
