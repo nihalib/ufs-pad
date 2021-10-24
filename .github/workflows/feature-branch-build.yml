@@ -8,6 +8,7 @@ on:
     branches-ignore:
       - master
       - main
+      - gh-pages
   pull_request:
     branches: [ main ]
 
@@ -46,8 +47,10 @@ jobs:
   apiSpec:
     name: Release api document
     needs: build
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v2
     - name: download api-spec
       uses: actions/download-artifact@v2
       with:
@@ -56,19 +59,30 @@ jobs:
     - name: download swagger ui
       run: |
         release_tag=$(curl -sL https://api.github.com/repos/swagger-api/swagger-ui/releases/latest | jq -r ".tag_name")
-        curl -sL -o $release_tag.tar.gz https://api.github.com/repos/swagger-api/swagger-ui/tarball/$release_tag
-        ls
+        curl -sL -o swaggerUi.tar.gz https://api.github.com/repos/swagger-api/swagger-ui/tarball/$release_tag
     - name: extract swagger ui
       uses: brunoborges/justextract@v1
       with:
-        file: *.tar.gz
-    - name: generate swagger
+        file: swaggerUi.tar.gz
+    - name: add swagger-doc to swagger ui
       run: |
         mkdir docs
-        ls
         mv swag*/dist/** docs
         mv docs/index.html .
         mv ufs-api/target/swagger.json docs
         rm -rf swag* *.tar.gz
-        cd docs
-        ls
+        sed -i "s|https://petstore.swagger.io/v2/swagger.json|docs/swagger.json/swagger.json|g" index.html
+        sed -i "s|href=\"./|href=\"docs/|g" index.html
+        sed -i "s|src=\"./|src=\"docs/|g" index.html
+    - name: configure git
+      run: |
+        git config user.name "Github Actions Bot"
+        git config user.email "<>"
+    - name: publish doc to gh-pages
+      run: |
+        git push -d origin gh-pages
+        git fetch origin
+        git checkout -b gh-pages
+        git add --all
+        git commit -m "Publish API to gh-pages"
+        git push --set-upstream origin gh-pages -f
