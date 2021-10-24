@@ -58,6 +58,10 @@ jobs:
         release_tag=$(curl -sL https://api.github.com/repos/swagger-api/swagger-ui/releases/latest | jq -r ".tag_name")
         curl -sL -o $release_tag.tar.gz https://api.github.com/repos/swagger-api/swagger-ui/tarball/$release_tag
         ls
+    - name: extract swagger ui
+      uses: brunoborges/justextract@v1
+      with:
+        file: *.tar.gz
     - name: generate swagger
       run: |
         mkdir docs
