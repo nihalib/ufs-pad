@@ -30,6 +30,6 @@ jobs:
     - name: setup-docker
       uses: docker-practice/actions-setup-docker@1.0.8
     - name: Build with Maven
-      run: mvn -s $GITHUB_WORKSPACE/.github/workflows/maven-settings.xml -B clean deploy --file pom.xml
+      run: mvn -s $GITHUB_WORKSPACE/.github/workflows/maven-settings.xml -B clean install --file pom.xml
       env:
         M2_SECRET_TOKEN: ${{ secrets.M2_SECRET_TOKEN }}
